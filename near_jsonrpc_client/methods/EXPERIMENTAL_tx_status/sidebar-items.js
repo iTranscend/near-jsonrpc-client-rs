@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["RpcTransactionError",""],["TransactionInfo",""]],"struct":[["RpcTransactionStatusRequest",""]],"type":[["RpcTransactionStatusResponse",""]]});

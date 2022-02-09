@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Lower-level API for interfacing with the NEAR Protocol via JSONRPC."><meta name="keywords" content="rust, rustlang, rust-lang, near_jsonrpc_client"><title>near_jsonrpc_client - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../ayu.css" disabled ><script id="default-settings" ></script><script src="../storage.js"></script><script src="../crates.js"></script><script defer src="../main.js"></script>
+    <noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../favicon.svg"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../near_jsonrpc_client/index.html'><div class='logo-container rust-logo'><img src='../rust-logo.png' alt='logo'></div></a><h2 class="location">Crate near_jsonrpc_client</h2><div class="block version"><div class="narrow-helper"></div><p>Version 0.0.0</p></div><div class="sidebar-elems"><a id="all-types" href="all.html"><p>See all near_jsonrpc_client's items</p></a><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#constants">Constants</a></li><li><a href="#traits">Traits</a></li><li><a href="#types">Type Definitions</a></li></ul></div><div id="sidebar-vars" data-name="near_jsonrpc_client" data-ty="mod" data-relpath=""></div><script defer src="sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../wheel.svg"></a></div></form></nav><section id="main" class="content"><h1 class="fqn"><span class="in-band">Crate <a class="mod" href="#">near_jsonrpc_client</a><button id="copy-path" onclick="copy_path(this)" title="Copy item path to clipboard"><img src="../clipboard.svg" width="19" height="18" alt="Copy item path"></button></span><span class="out-of-band"><span id="render-detail"><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class="inner">&#x2212;</span>]</a></span><a class="srclink" href="../src/near_jsonrpc_client/lib.rs.html#1-546" title="goto source code">[src]</a></span></h1><details class="rustdoc-toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Lower-level API for interfacing with the NEAR Protocol via JSONRPC.</p>
+<h3 id="layout" class="section-header"><a href="#layout">Layout</a></h3>
+<p>Each one the valid <em>public</em> JSON RPC methods are pre-defined in specialized modules within the <code>methods</code> module.</p>
+<p>Inside every method module (e.g <a href="methods/query/index.html" title="methods::query"><code>methods::query</code></a>) there’s;</p>
+<ul>
+<li>a <code>Request</code> type (e.g <a href="methods/query/struct.RpcQueryRequest.html" title="methods::query::RpcQueryRequest"><code>methods::query::RpcQueryRequest</code></a>)</li>
+<li>a <code>Response</code> type (e.g <a href="methods/query/struct.RpcQueryResponse.html" title="methods::query::RpcQueryResponse"><code>methods::query::RpcQueryResponse</code></a>)</li>
+<li>and an <code>Error</code> type (e.g <a href="methods/query/enum.RpcQueryError.html" title="methods::query::RpcQueryError"><code>methods::query::RpcQueryError</code></a>)</li>
+</ul>
+<p>Calling a constructed request on a client returns with the result and error types for that method.</p>
+<h3 id="examples" class="section-header"><a href="#examples">Examples</a></h3>
+<ol>
+<li>
+<p>Request server status from testnet RPC</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">near_jsonrpc_client</span>::{<span class="ident">methods</span>, <span class="ident">JsonRpcClient</span>};
+
+<span class="kw">let</span> <span class="ident">testnet_client</span> <span class="op">=</span> <span class="ident">JsonRpcClient::connect</span>(<span class="string">&quot;https://rpc.testnet.near.org&quot;</span>);
+
+<span class="kw">let</span> <span class="ident">status_request</span> <span class="op">=</span> <span class="ident">methods::status::RpcStatusRequest</span>; <span class="comment">// no params</span>
+
+<span class="comment">// call a method on the server via the connected client</span>
+<span class="kw">let</span> <span class="ident">server_status</span> <span class="op">=</span> <span class="ident">testnet_client</span>.<span class="ident">call</span>(<span class="ident">status_request</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+
+<span class="macro">println!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">server_status</span>);</code></pre></div>
+</li>
+<li>
+<p>Query transaction status from mainnet RPC</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">near_jsonrpc_client</span>::{<span class="ident">methods</span>, <span class="ident">JsonRpcClient</span>};
+<span class="kw">use</span> <span class="ident">near_jsonrpc_primitives::types::transactions::TransactionInfo</span>;
+
+<span class="kw">let</span> <span class="ident">mainnet_client</span> <span class="op">=</span> <span class="ident">JsonRpcClient::connect</span>(<span class="string">&quot;https://archival-rpc.mainnet.near.org&quot;</span>);
+
+<span class="kw">let</span> <span class="ident">tx_status_request</span> <span class="op">=</span> <span class="ident">methods::tx::RpcTransactionStatusRequest</span> {
+    <span class="ident">transaction_info</span>: <span class="ident">TransactionInfo::TransactionId</span> {
+        <span class="ident">hash</span>: <span class="string">&quot;9FtHUFBQsZ2MG77K3x3MJ9wjX3UT8zE1TczCrhZEcG8U&quot;</span>.<span class="ident">parse</span>()<span class="question-mark">?</span>,
+        <span class="ident">account_id</span>: <span class="string">&quot;miraclx.near&quot;</span>.<span class="ident">parse</span>()<span class="question-mark">?</span>,
+    },
+};
+
+<span class="kw">let</span> <span class="ident">tx_status</span> <span class="op">=</span> <span class="ident">mainnet_client</span>.<span class="ident">call</span>(<span class="ident">tx_status_request</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+
+<span class="macro">println!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">tx_status</span>);</code></pre></div>
+</li>
+<li>
+<p>For all intents and purposes, the predefined structures in <code>methods</code> should suffice, if you find that they
+don’t or you crave extra flexibility, well, you can opt in to use the generic constructor <code>methods::any()</code> with the <code>any</code> feature flag.</p>
+<p>In this example, we retrieve only the parts from the genesis config response that we care about.</p>
+<div class="example-wrap"><pre class="language-toml"><code>near-jsonrpc-client = { ..., features = [&quot;any&quot;] }</code></pre></div>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use</span> <span class="ident">serde::Deserialize</span>;
+<span class="kw">use</span> <span class="ident">serde_json::json</span>;
+
+<span class="kw">use</span> <span class="ident">near_jsonrpc_client</span>::{<span class="ident">methods</span>, <span class="ident">JsonRpcClient</span>};
+<span class="kw">use</span> <span class="ident">near_primitives::serialize::u128_dec_format</span>;
+<span class="kw">use</span> <span class="ident">near_primitives::types</span>::<span class="kw-2">*</span>;
+
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Deserialize</span>)]</span>
+<span class="kw">struct</span> <span class="ident">PartialGenesisConfig</span> {
+    <span class="ident">protocol_version</span>: <span class="ident">ProtocolVersion</span>,
+    <span class="ident">chain_id</span>: <span class="ident">String</span>,
+    <span class="ident">genesis_height</span>: <span class="ident">BlockHeight</span>,
+    <span class="ident">epoch_length</span>: <span class="ident">BlockHeightDelta</span>,
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;u128_dec_format&quot;</span>)]</span>
+    <span class="ident">min_gas_price</span>: <span class="ident">Balance</span>,
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;u128_dec_format&quot;</span>)]</span>
+    <span class="ident">max_gas_price</span>: <span class="ident">Balance</span>,
+    <span class="attribute">#[<span class="ident">serde</span>(<span class="ident">with</span> <span class="op">=</span> <span class="string">&quot;u128_dec_format&quot;</span>)]</span>
+    <span class="ident">total_supply</span>: <span class="ident">Balance</span>,
+    <span class="ident">validators</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">AccountInfo</span><span class="op">&gt;</span>,
+}
+
+<span class="kw">impl</span> <span class="ident">methods::RpcHandlerResponse</span> <span class="kw">for</span> <span class="ident">PartialGenesisConfig</span> {}
+
+<span class="kw">let</span> <span class="ident">mainnet_client</span> <span class="op">=</span> <span class="ident">JsonRpcClient::connect</span>(<span class="string">&quot;https://rpc.mainnet.near.org&quot;</span>);
+
+<span class="kw">let</span> <span class="ident">genesis_config_request</span> <span class="op">=</span> <span class="ident">methods::any</span>::<span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">PartialGenesisConfig</span>, ()<span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="string">&quot;EXPERIMENTAL_genesis_config&quot;</span>,
+    <span class="macro">json!</span>(<span class="ident">null</span>),
+);
+
+<span class="kw">let</span> <span class="ident">partial_genesis</span> <span class="op">=</span> <span class="ident">mainnet_client</span>.<span class="ident">call</span>(<span class="ident">genesis_config_request</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+
+<span class="macro">println!</span>(<span class="string">&quot;{:#?}&quot;</span>, <span class="ident">partial_genesis</span>);</code></pre></div>
+</li>
+</ol>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="mod" href="auth/index.html" title="near_jsonrpc_client::auth mod">auth</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="errors/index.html" title="near_jsonrpc_client::errors mod">errors</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="header/index.html" title="near_jsonrpc_client::header mod">header</a></div><div class="item-right docblock-short"><p>Client Headers.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="mod" href="methods/index.html" title="near_jsonrpc_client::methods mod">methods</a></div><div class="item-right docblock-short"></div></div></div><h2 id="structs" class="small-section-header"><a href="#structs">Structs</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.JsonRpcClient.html" title="near_jsonrpc_client::JsonRpcClient struct">JsonRpcClient</a></div><div class="item-right docblock-short"><p>A NEAR JSON RPC Client.</p>
+</div></div><div class="item-row"><div class="item-left module-item"><a class="struct" href="struct.JsonRpcClientConnector.html" title="near_jsonrpc_client::JsonRpcClientConnector struct">JsonRpcClientConnector</a></div><div class="item-right docblock-short"><p>NEAR JSON RPC client connector.</p>
+</div></div></div><h2 id="constants" class="small-section-header"><a href="#constants">Constants</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.NEAR_MAINNET_ARCHIVAL_RPC_URL.html" title="near_jsonrpc_client::NEAR_MAINNET_ARCHIVAL_RPC_URL constant">NEAR_MAINNET_ARCHIVAL_RPC_URL</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.NEAR_MAINNET_RPC_URL.html" title="near_jsonrpc_client::NEAR_MAINNET_RPC_URL constant">NEAR_MAINNET_RPC_URL</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.NEAR_TESTNET_ARCHIVAL_RPC_URL.html" title="near_jsonrpc_client::NEAR_TESTNET_ARCHIVAL_RPC_URL constant">NEAR_TESTNET_ARCHIVAL_RPC_URL</a></div><div class="item-right docblock-short"></div></div><div class="item-row"><div class="item-left module-item"><a class="constant" href="constant.NEAR_TESTNET_RPC_URL.html" title="near_jsonrpc_client::NEAR_TESTNET_RPC_URL constant">NEAR_TESTNET_RPC_URL</a></div><div class="item-right docblock-short"></div></div></div><h2 id="traits" class="small-section-header"><a href="#traits">Traits</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="trait" href="trait.AsUrl.html" title="near_jsonrpc_client::AsUrl trait">AsUrl</a></div><div class="item-right docblock-short"></div></div></div><h2 id="types" class="small-section-header"><a href="#types">Type Definitions</a></h2>
+<div class="item-table"><div class="item-row"><div class="item-left module-item"><a class="type" href="type.MethodCallResult.html" title="near_jsonrpc_client::MethodCallResult type">MethodCallResult</a></div><div class="item-right docblock-short"></div></div></div></section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../" data-current-crate="near_jsonrpc_client" data-search-index-js="../search-index.js" data-search-js="../search.js"></div>
+</body></html>

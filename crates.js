@@ -1,0 +1,1 @@
+window.ALL_CRATES = ["near_jsonrpc_client"];

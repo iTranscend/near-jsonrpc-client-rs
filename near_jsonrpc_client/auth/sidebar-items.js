@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["ApiKey","NEAR JSON RPC API key."],["InvalidApiKey","An error returned when an API key contains invalid characters."]],"trait":[["IntoApiKey","A marker trait used to identify values that can be made into API keys."]]});
